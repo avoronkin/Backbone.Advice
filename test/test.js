@@ -1,4 +1,4 @@
-define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
+define(['chai', 'backbone', 'advice', 'Mixin'], function(chai, Backbone, advice) {
 
 
 	chai.should();
@@ -32,11 +32,11 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		return temp;
 	};
 
-	describe('Backbone.Advice', function() {
+	describe('advice', function() {
 
 		describe('#addMixin', function() {
 			var A = function() {};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			it('should have properties added from the mixin', function() {
 				A.should.have.property('mixin').and.be.a('function');
 				A.should.have.property('addToObj').and.be.a('function');
@@ -49,7 +49,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 
 		describe('create new object', function() {
 			var A = function() {};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			a = new A();
 			it('should have hasMixin function', function() {
 				A.should.have.property('hasMixin').and.be.a('function');
@@ -64,7 +64,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			A.around('getNumber', function(orig) {
 				return orig() + 1;
 			});
@@ -82,7 +82,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			A.before('getNumber', objMixin.before.getNumber);
 			var a = new A();
 			var number = a.getNumber();
@@ -99,7 +99,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			A.after('getNumber', after.getNumber);
 			var a = new A();
 			it('should alter the number after it is returned', function() {
@@ -115,7 +115,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			A.mixin(objMixin);
 
 			var a = new A();
@@ -136,7 +136,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(B);
+			advice.addMixin(B);
 			B.mixin(fnMixin, {
 				clobber: true
 			});
@@ -158,7 +158,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					return this.number;
 				}
 			};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			var mixin = function() {
 				this.before('getNumber', function() {
 					this.number += 1;
@@ -175,7 +175,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 			var mixin = function(){};
 			var mixin2 = function(){};
 			var A = function(){};
-			Backbone.Advice.addMixin(A);
+			advice.addMixin(A);
 			A.mixin(mixin);
 			var a = new A();
 			it('should have mixin applied to constructor', function() {
@@ -191,6 +191,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		describe('inherit mixin through extend', function() {
 			var mixin = function mixin() {};
 			var mixin2 = function mixin2() {};
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({});
 			it('should have mixin function', function() {
 				A.should.have.property('mixin');
@@ -221,7 +222,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 					this.id = options.id;
 				});
 			};
-
+            advice.addMixin(Backbone.View);
 			var View1 = Backbone.View.extend().mixin(mixin, {id: 1}).mixin([], {id:2});
 
 			var view1 = new View1();
@@ -241,6 +242,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 
 	describe('Backbone.Advice.Mixins', function() {
 		describe('Mixin.all.overrideWithOptions', function() {
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.all.overrideWithOptions);
 			var a = new A({
 				foo: 'bar'
@@ -251,6 +253,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		});
 
 		describe('Mixin.view.makeSelectable', function() {
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.view.makeSelectable);
 			var a = new A();
 			it('should have selet and deselect methods', function() {
@@ -277,6 +280,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		});
 
 		describe('Mixin.view.expandable', function(){
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.view.expandable);
 			var a = new A();
 			it('should have expand and collapse methods', function() {
@@ -304,6 +308,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		});
 
 		describe('Mixin.view.makeFocusable', function() {
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.view.makeFocusable);
 			var a = new A();
 			it('should be focusable', function() {
@@ -317,6 +322,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		});
 
 		describe('Mixin.view.focusOnSelect', function() {
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.view.focusOnSelect);
 			var a = new A();
 			it('should not be focused or selected', function() {
@@ -336,6 +342,7 @@ define(['chai', 'Backbone.Advice', 'Mixin'], function(chai) {
 		});
 
 		describe('Mixin.view.expandWhenSelected', function() {
+            advice.addMixin(Backbone.View);
 			var A = Backbone.View.extend({}).mixin(Mixin.view.expandWhenSelected);
 			var a = new A();
 			it('should not be focused or selected', function() {

@@ -28,7 +28,7 @@ require.config({
     'jquery': 'lib/jquery.1.7.2',
     'underscore': 'lib/underscore',
     'backbone': 'lib/backbone',
-    'Backbone.Advice': 'advice',
+    'advice': 'advice',
     'Mixin': 'mixin'
   },
 

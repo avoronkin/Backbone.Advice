@@ -1,7 +1,7 @@
 define('Mixin', [
   'underscore',
-  'Backbone.Advice'
-], function(_) {
+  'advice'
+], function(_, advice) {
 
   var Mixin = {
     view: {},
@@ -196,7 +196,7 @@ define('Mixin', [
       else
         this.setUpdateStatus(this.UpdateStatus.loading);
       options['success'] =
-        Backbone.Advice.after(options['success'] || function(){},
+        advice.after(options['success'] || function(){},
           _.bind(function() {
             this.setUpdateStatus(this.UpdateStatus.loaded);
           }, this));

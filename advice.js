@@ -16,15 +16,15 @@
 // ==========================================
 (function (root, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["backbone", "underscore"], factory);
+        define(["underscore"], factory);
     } else if (typeof exports === "object") {
-        module.exports = factory(require("backbone"), require("underscore"));
+        module.exports = factory(require("underscore"));
     } else {
-        root.Backbone.Advice = factory(root.Backbone, root._);
+        root.advice = factory(root._);
     }
-}(this, function (Backbone, _) {
+}(this, function (_) {
 
-    Backbone.Advice = {
+    var advice = {
 
         // calls the wrapped function with base functions as first argument
         around: function (base, wrapped) {
@@ -87,7 +87,7 @@
             if (typeof base == 'function')
                 base = this.prototype;
             _.each(obj, function (val, key) {
-                base[key] = _.extend(_.clone(Backbone.Advice.findVal(base, key)) || {}, val);
+                base[key] = _.extend(_.clone(advice.findVal(base, key)) || {}, val);
             });
             return this;
         },
@@ -100,7 +100,7 @@
             if (typeof base == 'function')
                 base = this.prototype;
             _.each(obj, function (val, key) {
-                if (!Backbone.Advice.findVal(base, key))
+                if (!advice.findVal(base, key))
                     base[key] = val;
             });
             return this;
@@ -219,12 +219,12 @@
                         base = this.prototype;
 
                     // find original function in the prototype chain
-                    var orig = Backbone.Advice.findVal(base, method);
+                    var orig = advice.findVal(base, method);
 
                     // use an identity function if none found
                     if (typeof orig != 'function')
                         orig = _.identity;
-                    base[method] = Backbone.Advice[m](orig, fn);
+                    base[method] = advice[m](orig, fn);
 
                     // chaining
                     return this;
@@ -232,20 +232,16 @@
             });
 
             // add in other functions
-            obj.mixin = Backbone.Advice.mixin;
-            obj.addToObj = Backbone.Advice.addToObj;
-            obj.setDefaults = Backbone.Advice.setDefaults;
-            obj.findVal = Backbone.Advice.findVal;
-            obj.clobber = Backbone.Advice.clobber;
-            obj.prototype.hasMixin = obj.hasMixin = Backbone.Advice.hasMixin;
+            obj.mixin = advice.mixin;
+            obj.addToObj = advice.addToObj;
+            obj.setDefaults = advice.setDefaults;
+            obj.findVal = advice.findVal;
+            obj.clobber = advice.clobber;
+            obj.prototype.hasMixin = obj.hasMixin = advice.hasMixin;
 
         }
     };
 
-    Backbone.Advice.addMixin(Backbone.View);
-    Backbone.Advice.addMixin(Backbone.Model);
-    Backbone.Advice.addMixin(Backbone.Collection);
-
-    return Backbone.Advice;
+    return advice;
 
 }));
