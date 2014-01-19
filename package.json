@@ -2,6 +2,7 @@
     "name": "Backbone.Advice",
     "description": "",
     "version": "1.0.0",
+    "main": "advice",
     "engines": {
         "node": ">= 0.8.x"
     },
