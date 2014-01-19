@@ -108,6 +108,77 @@ define(['chai', 'backbone', 'advice', 'Mixin'], function (chai, Backbone, advice
             });
         });
 
+        describe('#clobber', function () {
+            var A = function () {};
+            A.prototype = {
+                b: 'c'
+            };
+            advice.addMixin(A);
+            A.clobber({
+                b: 'd'
+            });
+            var a = new A();
+
+            it('should overwrite existing property', function () {
+                a.should.have.property('b');
+                a.b.should.be.equal('d');
+
+            });
+        });
+
+        describe('#addToObj', function () {
+            var A = function () {};
+            A.prototype = {
+                b: {
+                    c: 2
+                }
+            };
+            advice.addMixin(A);
+            A.addToObj({
+                b: {
+                    c: 3,
+                    d: 5
+                }
+            });
+
+            var a = new A();
+
+            it('should add property to object', function () {
+                a.b.should.have.property('d');
+                a.b.d.should.be.equal(5);
+            });
+
+            it('should overwrite existing property', function () {
+                a.b.should.have.property('c');
+                a.b.c.should.be.equal(3);
+            });
+        });
+
+        describe('#setDefaults', function () {
+            var A = function () {};
+            A.prototype = {
+                b:1 
+            };
+            advice.addMixin(A);
+            A.setDefaults({
+                b:2,
+                c:3
+            });
+
+            var a = new A();
+
+            it('shouldn\'t set property if it already exist', function () {
+                a.should.have.property('b');
+                a.b.should.be.equal(1);
+            });
+
+            it('should set property if it doesn\'t exist', function () {
+                a.should.have.property('c');
+                a.c.should.be.equal(3);
+            });
+
+        });
+
         describe('#mixin simple', function () {
             var A = function () {};
             A.prototype = {

@@ -57,7 +57,7 @@
                 // this is a separate statement for debugging purposes.
                 var res = (orig.unbound || orig).apply(this, args);
 
-                afterFn = (typeof after == 'function') ? after : after.obj[after.fnName];
+                afterFn = after;//(typeof after == 'function') ? after : after.obj[after.fnName];
                 afterFn.apply(this, args);
                 return res;
             });
@@ -70,6 +70,7 @@
             var base = this;
             if (typeof base == 'function')
                 base = this.prototype;
+
             if (_.isString(key)) {
                 var temp = key;
                 key = {};
@@ -86,9 +87,9 @@
             var base = this;
             if (typeof base == 'function')
                 base = this.prototype;
-            _.each(obj, function (val, key) {
-                base[key] = _.extend(_.clone(advice.findVal(base, key)) || {}, val);
-            });
+
+            _.extend(base, obj);
+
             return this;
         },
 
@@ -99,10 +100,9 @@
             var base = this;
             if (typeof base == 'function')
                 base = this.prototype;
-            _.each(obj, function (val, key) {
-                if (!advice.findVal(base, key))
-                    base[key] = val;
-            });
+
+            _.defaults(base, obj);
+
             return this;
         },
 
@@ -110,8 +110,8 @@
          * find a value in a prototype chain
          */
         findVal: function (obj, name) {
-            while (!obj[name] && obj.prototype)
-                obj = obj.prototype;
+            // while (!obj[name] && obj.prototype)
+            //     obj = obj.prototype;
             return obj[name];
         },
 
