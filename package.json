@@ -1,12 +1,14 @@
 {
-    "name": "Backbone.Advice",
-    "description": "",
-    "version": "1.0.0",
-    "main": "advice",
-    "engines": {
-        "node": ">= 0.8.x"
-    },
-    "dependencies": {},
-    "devDependencies": {},
-    "private": true
+  "name": "Backbone.Advice",
+  "description": "",
+  "version": "1.0.0",
+  "main": "advice",
+  "engines": {
+    "node": ">= 0.8.x"
+  },
+  "dependencies": {
+    "underscore": "*"
+  },
+  "devDependencies": {},
+  "private": true
 }
